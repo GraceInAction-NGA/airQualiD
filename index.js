@@ -22,7 +22,7 @@ const database = firebase.firestore()
 
 app.get('/', (req, res) => { 
   setInterval(alertFunc, 600000);
-  res.send("Pinging purpleair");
+  res.sendFile(__dirname + "/index.html");
 });
 
 function alertFunc() {
@@ -33,4 +33,4 @@ function alertFunc() {
   });
 }
 
-app.listen(process.env.PORT, () => console.log(`Example app listening on port ${port}!`))
+app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))
