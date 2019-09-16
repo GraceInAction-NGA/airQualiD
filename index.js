@@ -21,7 +21,7 @@ firebase.initializeApp(firebaseConfig)
 const database = firebase.firestore()
 
 app.get('/', (req, res) => { 
-  setInterval(alertFunc, 60000);
+  setInterval(alertFunc, 600000);
   res.send("Pinging purpleair");
 });
 
