@@ -21,14 +21,19 @@ firebase.initializeApp(firebaseConfig)
 const database = firebase.firestore()
 
 app.get('/', (req, res) => { 
-  setInterval(alertFunc, 600000);
+  setInterval(alertFunc, 10000);
   res.sendFile(__dirname + "/index.html");
 });
 
 function alertFunc() {
   axios.get("https://www.purpleair.com/json?show=37399")
   .then(data => {
-    console.log(data.data);
+    console.log(data.data.results[0].Stats);
+    var obj = JSON.parse (data.data.results[0].Stats)
+    var obj_2 = JSON.parse (data.data.results[1].Stats)
+    console.log (obj)
+    data.data.results[0].Stats = obj
+    data.data.results[1].Stats = obj_2
     database.collection("readings").add(data.data);
   });
 }
