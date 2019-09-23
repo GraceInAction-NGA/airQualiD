@@ -25,6 +25,33 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+function aqi(C){
+  const Ih = 0
+  const Il = 0
+  const Ch = 0
+  const Cl = 0
+  const I = (Ih-Il/Ch-Cl)*(C-Cl)+ Il
+
+  function getCategory (I){
+    if (I <=50)
+      return ("Good")
+    if (I <=100)
+      return ("Moderate")
+    if (I <=150)
+      return ("Unhealthy for Sensative Groups")
+    if (I <=200)
+      return ("Unhealthy")
+    if (I <=300)
+      return ("Very Unhealthy")
+    if (I <=500)
+      return ("Hazardous")   
+    return("You're dead")
+  }
+
+var category = getCategory(I)
+return [I,getCategory]
+}
+
 function alertFunc() {
   axios.get("https://www.purpleair.com/json?show=37399")
   .then(data => {
