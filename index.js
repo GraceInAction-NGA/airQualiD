@@ -21,47 +21,130 @@ firebase.initializeApp(firebaseConfig)
 const database = firebase.firestore()
 
 app.get('/', (req, res) => { 
-  setInterval(alertFunc, 10000);
+  setInterval(alertFunc, 30000);
   res.sendFile(__dirname + "/index.html");
 });
 
-function aqi(C){
-  const Ih = 0
-  const Il = 0
-  const Ch = 0
-  const Cl = 0
-  const I = (Ih-Il/Ch-Cl)*(C-Cl)+ Il
+function getCategory (I){
+  if (I <=50)
+    return ("Good")
+  if (I <=100)
+    return ("Moderate")
+  if (I <=150)
+    return ("Unhealthy for Sensative Groups")
+  if (I <=200)
+    return ("Unhealthy")
+  if (I <=300)
+    return ("Very Unhealthy")
+  return ("Hazardous")   
+}
 
-  function getCategory (I){
-    if (I <=50)
-      return ("Good")
-    if (I <=100)
-      return ("Moderate")
-    if (I <=150)
-      return ("Unhealthy for Sensative Groups")
-    if (I <=200)
-      return ("Unhealthy")
-    if (I <=300)
-      return ("Very Unhealthy")
-    if (I <=500)
-      return ("Hazardous")   
-    return("You're dead")
-  }
+function getCl (C){
+  if (C <=12.0)
+    return (0.0)
+  if (C <=35.4)
+    return (12.1)
+  if (C <=55.4)
+    return (35.5)
+  if (C <=150.4)
+    return (55.5)
+  if (C <=250.4)
+    return (150.5)
+  if (C <=350.4)
+    return (250.5)
+  if (C <=500.4)
+    return (350.5)
+  return (500.5)
+}
 
-var category = getCategory(I)
-return [I,getCategory]
+function getCh (C){
+  if (C <=12.0)
+    return (12.0)
+  if (C <=35.4)
+    return (35.4)
+  if (C <=55.4)
+    return (55.4)
+  if (C <=150.4)
+    return (150.4)
+  if (C <=250.4)
+    return (250.4)
+  if (C <= 350.4)
+    return (350.4)
+  if (C <= 500.4)
+    return (500.4)
+  return (99999.9)
+}
+
+function getIl (C){
+  if (C <=50)
+    return (0)
+  if (C <=100)
+    return (51)
+  if (C <=150)
+    return (101)
+  if (C <=200)
+    return (151)
+  if (C <=300)
+    return (201)
+  if (C <=400)
+    return (301)
+  if (C <=500)
+    return (401)
+  return (501)
+}
+
+function getIh (C){
+  if (C <=50)
+    return (50)
+  if (C <=100)
+    return (100)
+  if (C <=150)
+    return (150)
+  if (C <=200)
+    return (200)
+  if (C <=300)
+    return (300)
+  if (C <=400)
+    return (400)
+  if (C <=500)
+    return (500)
+  return (999)
+}
+
+function getAqi(C){
+  var Ih = getIh(C)
+
+  var Il = getIl(C)
+
+  var Ch = getCh(C)
+
+  var Cl = getCl(C)
+
+  const I = ((Ih-Il)/(Ch-Cl))*(C-Cl)+ Il
+  
+  console.log('C', C);
+  console.log('IH', Ih);
+  console.log('IL', Il);
+  console.log('CH', Ch);
+  console.log('CL', Cl);
+  console.log('I', I);
+
+  var category = getCategory(I)
+  return [Math.round(I), category]
 }
 
 function alertFunc() {
   axios.get("https://www.purpleair.com/json?show=37399")
   .then(data => {
-    console.log(data.data.results[0].Stats);
     var obj = JSON.parse (data.data.results[0].Stats)
     var obj_2 = JSON.parse (data.data.results[1].Stats)
-    console.log (obj)
     data.data.results[0].Stats = obj
     data.data.results[1].Stats = obj_2
+    var [aqi, category] = getAqi(data.data.results[0].Stats.v1)
+    console.log (category + " with aqi of " + aqi + '\n');
     database.collection("readings").add(data.data);
+  }).catch(err => {
+    console.log(err)
   });
 }
 
