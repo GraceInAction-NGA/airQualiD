@@ -140,9 +140,21 @@ function alertFunc() {
     var obj_2 = JSON.parse (data.data.results[1].Stats)
     data.data.results[0].Stats = obj
     data.data.results[1].Stats = obj_2
-    var [aqi, category] = getAqi(data.data.results[0].Stats.v1)
+    var concentration = data.data.results[0].Stats.v1
+    var time = data.data.results[0].Stats.lastModified
+    var [aqi, category] = getAqi(concentration)
     console.log (category + " with aqi of " + aqi + '\n');
     database.collection("readings").add(data.data);
+
+var aqis = {
+  aqi: aqi, 
+  category: category, 
+  concentration: concentration,
+  timestamp: time,
+};
+
+database.collection("aqis").add(aqis);
+
   }).catch(err => {
     console.log(err)
   });
