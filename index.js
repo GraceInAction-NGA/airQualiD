@@ -39,94 +39,53 @@ function getCategory (I){
   return ("Hazardous")   
 }
 
-function getCl (C){
+function getClh (C){
   if (C <=12.0)
-    return (0.0)
+    return {low: 0.0, high: 12.0}
   if (C <=35.4)
-    return (12.1)
+    return {low: 12.1, high: 35.4}
   if (C <=55.4)
-    return (35.5)
+    return {low: 35.5, high: 55.4}
   if (C <=150.4)
-    return (55.5)
+    return {low: 55.5, high: 150.4}
   if (C <=250.4)
-    return (150.5)
+    return {low: 150.5, high: 250.4}
   if (C <=350.4)
-    return (250.5)
+    return {low: 250.5, high: 350.4}
   if (C <=500.4)
-    return (350.5)
-  return (500.5)
+    return {low: 350.5, high: 500.4}
+  return {low: 500.5, high: 99999.9}
 }
 
-function getCh (C){
-  if (C <=12.0)
-    return (12.0)
-  if (C <=35.4)
-    return (35.4)
-  if (C <=55.4)
-    return (55.4)
-  if (C <=150.4)
-    return (150.4)
-  if (C <=250.4)
-    return (250.4)
-  if (C <= 350.4)
-    return (350.4)
-  if (C <= 500.4)
-    return (500.4)
-  return (99999.9)
-}
-
-function getIl (C){
+function getIlh (C){
   if (C <=50)
-    return (0)
+    return {low: 0, high: 50}
   if (C <=100)
-    return (51)
+    return {low: 51, high: 100}
   if (C <=150)
-    return (101)
+    return {low: 101, high: 150}
   if (C <=200)
-    return (151)
+    return {low: 151, high: 200}
   if (C <=300)
-    return (201)
+    return {low: 201, high: 300}
   if (C <=400)
-    return (301)
+    return {low: 301, high: 400}
   if (C <=500)
-    return (401)
-  return (501)
-}
-
-function getIh (C){
-  if (C <=50)
-    return (50)
-  if (C <=100)
-    return (100)
-  if (C <=150)
-    return (150)
-  if (C <=200)
-    return (200)
-  if (C <=300)
-    return (300)
-  if (C <=400)
-    return (400)
-  if (C <=500)
-    return (500)
-  return (999)
+    return {low: 401, high: 500}
+  return {low: 500, high: 900}
 }
 
 function getAqi(C){
-  var Ih = getIh(C)
 
-  var Il = getIl(C)
+  var Ilh = getIlh(C)
 
-  var Ch = getCh(C)
+  var Clh = getClh(C)
 
-  var Cl = getCl(C)
-
-  const I = ((Ih-Il)/(Ch-Cl))*(C-Cl)+ Il
+  const I = ((Ilh.high-Ilh.low)/(Clh.high-Clh.low))*(C-Clh.low)+ Ilh.low
   
   console.log('C', C);
-  console.log('IH', Ih);
-  console.log('IL', Il);
-  console.log('CH', Ch);
-  console.log('CL', Cl);
+  console.log('ILH', Ilh);
+  console.log('CLH', Clh);
   console.log('I', I);
 
   var category = getCategory(I)
@@ -140,16 +99,44 @@ function alertFunc() {
     var obj_2 = JSON.parse (data.data.results[1].Stats)
     data.data.results[0].Stats = obj
     data.data.results[1].Stats = obj_2
-    var concentration = data.data.results[0].Stats.v1
+    var realTime = data.data.results[0].Stats.v
+    var tenMin = data.data.results[0].Stats.v1
+    var thirtyMin = data.data.results[0].Stats.v2
+    var oneHr = data.data.results[0].Stats.v3
+    var sixHr = data.data.results[0].Stats.v4
+    var twentyfourHr = data.data.results[0].Stats.v5
+    var oneWk = data.data.results[0].Stats.v6
     var time = data.data.results[0].Stats.lastModified
-    var [aqi, category] = getAqi(concentration)
-    console.log (category + " with aqi of " + aqi + '\n');
+
+    var [aqi_1, category_1] = getAqi(realTime)
+    var [aqi_2, category_2] = getAqi(tenMin)
+    var [aqi_3, category_3] = getAqi(thirtyMin)
+    var [aqi_4, category_4] = getAqi(oneHr)
+    var [aqi_5, category_5] = getAqi(sixHr)
+    var [aqi_6, category_6] = getAqi(twentyfourHr)
+    var [aqi_7, category_7] = getAqi(oneWk)
+    console.log (category_6 + " with aqi of " + aqi_6 + '\n');
     database.collection("readings").add(data.data);
 
 var aqis = {
-  aqi: aqi, 
-  category: category, 
-  concentration: concentration,
+  aqi: {
+    realTime: aqi_1,
+    tenMin: aqi_2,
+    thirtyMin: aqi_3,
+    oneHr: aqi_4,
+    sixHr: aqi_5,
+    twentyfourHr: aqi_6,
+    oneWk: aqi_7,
+  },
+  category: {
+    realTime: category_1,
+    tenMin: category_2,
+    thirtyMin: category_3,
+    oneHr: category_4,
+    twentyfourHr: category_5,
+    oneWk: aqi_7,
+  },
+  concentration: twentyfourHr,
   timestamp: time,
 };
 
