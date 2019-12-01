@@ -1,14 +1,5 @@
-/*
-    Class
-    Controller - Endpoints
-    Service - interacts with repositories
-    Repository - models the database
-
-    Adapter - transforms
-*/
-
-const firebase = require('./Firebase');
-const AqiService = require('./AqiService');
+const firebase = require('../../Helpers/Firebase');
+const AqiService = require('../../Aqi/AqiService');
 
 function parse(data) {
     data.results[0].Stats = JSON.parse(data.results[0].Stats);
@@ -51,12 +42,21 @@ function toPurpleAirAqi(data) {
 
 function save(res) {
     const parsedData = parse(res.data);
-    firebase.database.collection("readingss").add(parsedData);
+    firebase.database.collection("readings").add(parsedData);
 
     const purpleAirAqi = toPurpleAirAqi(parsedData);
-    firebase.database.collection("aqiss").add(purpleAirAqi);
+    firebase.database.collection("aqis").add(purpleAirAqi);
 }
 
 module.exports = {
     save
 }
+
+/*
+    Class
+    Controller - Endpoints
+    Service - interacts with repositories
+    Repository - models the database
+
+    Adapter - transforms
+*/

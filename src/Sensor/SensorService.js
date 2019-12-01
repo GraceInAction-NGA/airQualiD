@@ -1,4 +1,4 @@
-const PurpleAirRepository = require('./PurpleAirRepository');
+const PurpleAirRepository = require('./PurpleAir/PurpleAirRepository');
 const axios = require('axios');
 
 const PURPLEAIR_URL = "https://www.purpleair.com/json?show=37399";
