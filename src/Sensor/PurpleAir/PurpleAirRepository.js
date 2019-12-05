@@ -8,13 +8,13 @@ function parse(data) {
 }
 
 function toPurpleAirAqi(data) {
-    const realTime = AqiService.calculateAqi(data.results[0].Stats.v);
-    const tenMinutes = AqiService.calculateAqi(data.results[0].Stats.v1);
-    const thirtyMinutes = AqiService.calculateAqi(data.results[0].Stats.v2);
-    const oneHour = AqiService.calculateAqi(data.results[0].Stats.v3);
-    const sixHours = AqiService.calculateAqi(data.results[0].Stats.v4);
-    const twentyfourHours = AqiService.calculateAqi(data.results[0].Stats.v5);
-    const oneWeek= AqiService.calculateAqi(data.results[0].Stats.v6);
+    const realTime = AqiService.getAqi(data.results[0].Stats.v);
+    const tenMinutes = AqiService.getAqi(data.results[0].Stats.v1);
+    const thirtyMinutes = AqiService.getAqi(data.results[0].Stats.v2);
+    const oneHour = AqiService.getAqi(data.results[0].Stats.v3);
+    const sixHours = AqiService.getAqi(data.results[0].Stats.v4);
+    const twentyfourHours = AqiService.getAqi(data.results[0].Stats.v5);
+    const oneWeek= AqiService.getAqi(data.results[0].Stats.v6);
 
     return {
         aqi: {
