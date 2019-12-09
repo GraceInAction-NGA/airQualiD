@@ -8,11 +8,41 @@
 	  <meta name="description" content="The HTML5 Herald">
 	  <meta name="author" content="SitePoint">
 
+	  <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
 	</head>
 	<body>
-		<h1> hi </h1>
-
-		<!--<div id='PurpleAirWidget_37399_module_AQI_conversion_C0_average_10_layer_standard'>Loading PurpleAir Widget...</div>
-		<script src='https://www.purpleair.com/pa.widget.js?key=3WMISHA3QQCL4DQV&module=AQI&conversion=C0&average=10&layer=standard&container=PurpleAirWidget_37399_module_AQI_conversion_C0_average_10_layer_standard'></script>-->
+		<nav class="navbar navbar-light bg-light">
+			<span class="navbar-brand mb-0 h1">AirQualiD Server</span>
+		</nav>
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col">
+					<h2>Latest Saved AQI</h2>
+					<p id="latestAqi"></p>
+				</div>
+				<div class="col">
+					<h2>PurpleAir AQI</h2>
+						<div id='PurpleAirWidget_37399_module_AQI_conversion_C0_average_10_layer_standard'>Loading PurpleAir Widget...</div>
+						<script src='https://www.purpleair.com/pa.widget.js?key=3WMISHA3QQCL4DQV&module=AQI&conversion=C0&average=10&layer=standard&container=PurpleAirWidget_37399_module_AQI_conversion_C0_average_10_layer_standard'></script>
+				</div>
+			</div>
+		</div>
 	</body>
+
+	<script>
+		const Http = new XMLHttpRequest();
+		const url='http://localhost:3000/latest';
+		Http.open("GET", url);
+		Http.send();
+
+		Http.onreadystatechange = (e) => {
+			const latestResponse = JSON.parse(Http.responseText);
+			if (latestResponse.error) {
+				document.querySelector("#latestAqi").textContent = latestResponse.error;
+			} else {
+				document.querySelector("#latestAqi").textContent = latestResponse.aqi.realTime;
+			}
+		}
+	</script>
 </html>
