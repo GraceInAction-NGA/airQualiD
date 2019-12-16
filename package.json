@@ -2,10 +2,10 @@
   "name": "airqualid_server",
   "version": "1.0.0",
   "description": "Server will gather airquality monitors and save it to our Firebase",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "author": "Radical Productions",
   "license": "ISC",
