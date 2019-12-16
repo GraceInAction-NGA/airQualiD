@@ -1,7 +1,7 @@
 const firebase = require('../services/FirebaseService');
 const AqiAdapter = require('../helpers/AqiAdapter');
 
-function parse(data) {
+const parse = (data) => {
     data.results[0].Stats = JSON.parse(data.results[0].Stats);
     data.results[1].Stats = JSON.parse(data.results[1].Stats);
     return data;
