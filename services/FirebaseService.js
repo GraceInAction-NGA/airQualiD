@@ -15,4 +15,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 const database = firebase.firestore()
 
-module.exports = { database }
+const create = (collection, data) => {
+  database.collection(collection).add(data);
+}
+
+module.exports = {
+  database,
+  create
+}

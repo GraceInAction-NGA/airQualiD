@@ -1,10 +1,9 @@
-const SensorService = require('./src/Sensor/SensorService');
+const SensorPollingService = require('./services/SensorPollingService');
 const express = require('express');
-const firebase = require('./src/Helpers/Firebase');
+const firebase = require('./services/FirebaseService');
 
 const app = express();
 const PORT = 3000;
-const INTERVAL = 30000;
 
 app.use(express.static(__dirname));
 
@@ -21,5 +20,5 @@ app.get('/latest', (req, res) => {
 
 app.listen(process.env.PORT || PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
-  setInterval(SensorService.getPurpleAir, INTERVAL);
+  SensorPollingService.run();
 });

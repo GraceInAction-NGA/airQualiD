@@ -1,4 +1,4 @@
-function getCategory(I) {
+const getCategory = (I) => {
     if (I <= 50) return "Good";
     if (I <= 100) return "Moderate";
     if (I <= 150) return "Unhealthy for Sensative Groups";
@@ -7,7 +7,7 @@ function getCategory(I) {
     return "Hazardous";
 }
 
-function getConcentrationBreakpoints(C){
+const getConcentrationBreakpoints = (C) => {
     if (C <= 12.0) return {low: 0.0, high: 12.0};
     if (C <= 35.4) return {low: 12.1, high: 35.4};
     if (C <= 55.4) return {low: 35.5, high: 55.4};
@@ -18,7 +18,7 @@ function getConcentrationBreakpoints(C){
     return {low: 500.5, high: 99999.9};
 }
 
-function getIndexBreakpoints(C) {
+const getIndexBreakpoints = (C) => {
     if (C <= 12.0) return {low: 0, high: 50};
     if (C <= 35.4) return {low: 51, high: 100};
     if (C <= 55.4) return {low: 101, high: 150};
@@ -29,7 +29,7 @@ function getIndexBreakpoints(C) {
     return {low: 500, high: 900};
 }
 
-function calculateAqi(concentration) {
+const calculateAqi = (concentration) => {
     const indexBreakpoints = getIndexBreakpoints(concentration);
     const concentrationBreakpoints = getConcentrationBreakpoints(concentration);
 
@@ -41,7 +41,7 @@ function calculateAqi(concentration) {
     return (indexConcentrationRatio * concentrationDiff) + indexBreakpoints.low;
 }
 
-function getAqi(concentration){
+const getAqi = (concentration) => {
     const aqi = calculateAqi(concentration);
     
     return {
@@ -50,6 +50,39 @@ function getAqi(concentration){
     }
 }
 
+const fromPurpleAirAqi = (data) => {
+    const realTime = getAqi(data.results[0].Stats.v);
+    const tenMinutes = getAqi(data.results[0].Stats.v1);
+    const thirtyMinutes = getAqi(data.results[0].Stats.v2);
+    const oneHour = getAqi(data.results[0].Stats.v3);
+    const sixHours = getAqi(data.results[0].Stats.v4);
+    const twentyfourHours = getAqi(data.results[0].Stats.v5);
+    const oneWeek= getAqi(data.results[0].Stats.v6);
+
+    return {
+        aqi: {
+            realTime: realTime.aqi,
+            tenMinutes: tenMinutes.aqi,
+            thirtyMinutes: thirtyMinutes.aqi,
+            oneHour: oneHour.aqi,
+            sixHours: sixHours.aqi,
+            twentyfourHours: twentyfourHours.aqi,
+            oneWeek: oneWeek.aqi,
+        },
+        category: {
+            realTime: realTime.category,
+            tenMinutes: tenMinutes.category,
+            thirtyMinutes: thirtyMinutes.category,
+            oneHour: oneHour.category,
+            sixHours: sixHours.category,
+            twentyfourHours: twentyfourHours.category,
+            oneWeek: oneWeek.category,
+        },
+        concentration: data.results[0].Stats.v5,
+        timestamp: data.results[0].Stats.lastModified,
+    };
+}
+
 module.exports = {
-    getAqi
+    fromPurpleAirAqi
 }
