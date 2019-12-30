@@ -5,10 +5,15 @@ const firebase = require('./services/FirebaseService');
 const app = express();
 const PORT = 3000;
 
-app.use(express.static(__dirname));
+// app.use(express.static(__dirname));
+app.use('/', express.static(__dirname + '/public'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect JS bootstrap
+app.use('/jquery',  express.static(__dirname + '/node_modules/jquery/dist')); 
 
-app.get('/', (req, res) => { 
-  res.sendFile(__dirname + "/index.html");
+
+app.get('/', (req, res) => {
+  res.sendFile("/index.html");
 });
 
 app.get('/latest', (req, res) => {

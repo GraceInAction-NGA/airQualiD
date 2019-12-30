@@ -8,7 +8,8 @@
 	  <meta name="description" content="The HTML5 Herald">
 	  <meta name="author" content="SitePoint">
 
-	  <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+	  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+	  <script src="/jquery/jquery.min.js"></script>
 
 	</head>
 	<body>
@@ -31,18 +32,14 @@
 	</body>
 
 	<script>
-		const Http = new XMLHttpRequest();
-		const url='http://localhost:3000/latest';
-		Http.open("GET", url);
-		Http.send();
-
-		Http.onreadystatechange = (e) => {
-			const latestResponse = JSON.parse(Http.responseText);
+		const url = 'http://localhost:3000/latest';
+		$.get(url, (latestResponse) => {
 			if (latestResponse.error) {
 				document.querySelector("#latestAqi").textContent = latestResponse.error;
 			} else {
-				document.querySelector("#latestAqi").textContent = latestResponse.aqi.realTime;
+				const date = (new Date(latestResponse.timestamp)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
+				document.querySelector("#latestAqi").textContent = `${latestResponse.aqi.realTime} @ ${date}`;
 			}
-		}
+		});
 	</script>
 </html>
