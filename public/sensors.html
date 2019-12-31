@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+	  <meta charset="utf-8">
+
+	  <title>AirQualiD</title>
+
+	  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+	  <script src="/jquery/jquery.min.js"></script>
+	  <script src="/js/bootstrap.min.js"></script>
+
+	</head>
+	<body>
+		<nav class="navbar navbar-light navbar-expand-lg bg-light">
+			<span class="navbar-brand mb-0 h1">AirQualiD Server</span>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+				  <a class="nav-item nav-link" href="/index.html">Home <span class="sr-only">(current)</span></a>
+				  <a class="nav-item nav-link active" href="/sensors.html">Sensors</a>
+				</div>
+			  </div>
+		</nav>
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col">
+					<h1>Add Sensor</h1>
+                    <form>
+                        <div class="form-group">
+                            <label for="sensorName">Sensor Name</label>
+                            <input type="text" class="form-control" id="sensorName" placeholder="My Sensor">
+                        </div>
+                        <div class="form-group">
+                            <label for="sensorType">Sensor Type</label>
+                            <select class="form-control" id="sensorType">
+                                <option></option>
+                                <option>Purple Air</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sensorID">Sensor ID</label>
+                            <input type="text" class="form-control" id="sensorID" placeholder="Sensor ID">
+                            </div>
+                      </form>
+                </div>
+			</div>
+		</div>
+	</body>
+</html>
