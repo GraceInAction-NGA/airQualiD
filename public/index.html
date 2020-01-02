@@ -48,6 +48,6 @@
 				const date = (new Date(latestResponse.timestamp)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
 				document.querySelector("#latestAqi").textContent = `${latestResponse.aqi.realTime} @ ${date}`;
 			}
-		});
+		})
 	</script>
 </html>

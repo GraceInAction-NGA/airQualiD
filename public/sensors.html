@@ -26,27 +26,82 @@
 		</nav>
 		<div class="container mt-5">
 			<div class="row">
-				<div class="col">
+				<div class="col-xs-12 col-md-6">
 					<h1>Add Sensor</h1>
-                    <form>
+                    <form id="addSensorForm">
                         <div class="form-group">
                             <label for="sensorName">Sensor Name</label>
-                            <input type="text" class="form-control" id="sensorName" placeholder="My Sensor">
+                            <input type="text" name="sensorName"  class="form-control" id="sensorName" placeholder="My Sensor">
                         </div>
                         <div class="form-group">
                             <label for="sensorType">Sensor Type</label>
-                            <select class="form-control" id="sensorType">
+                            <select name="sensorType" class="form-control" id="sensorType">
                                 <option></option>
                                 <option>Purple Air</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="sensorID">Sensor ID</label>
-                            <input type="text" class="form-control" id="sensorID" placeholder="Sensor ID">
-                            </div>
-                      </form>
+                            <input type="text" name="sensorID" class="form-control" id="sensorID" placeholder="Sensor ID">
+						</div>
+						<button type="button" class="btn btn-primary mb-5">Add</button>
+                    </form>
+                </div>
+				<div class="col-xs-12 col-md-6">
+					<h1>Search Sensor</h1>
+                    <form id="searchSensorForm">
+                        <div class="form-group">
+                            <label for="sensorName">Sensor Name</label>
+                            <input type="text" name="sensorName" class="form-control" id="sensorName" placeholder="My Sensor">
+                        </div>
+                        <div class="form-group">
+                            <label for="sensorType">Sensor Type</label>
+                            <select name="sensorType" class="form-control" id="sensorType">
+                                <option></option>
+                                <option>Purple Air</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sensorID">Sensor ID</label>
+                            <input type="text" name="sensorID" class="form-control" id="sensorID" placeholder="Sensor ID">
+						</div>
+						<button type="button" class="btn btn-primary mb-5">Search</button>
+                    </form>
                 </div>
 			</div>
 		</div>
 	</body>
+
+	<script>
+		$(() => {
+			$("#addSensorForm button").click((e) => {
+				const url = 'http://localhost:3000/sensor';
+				const formData = $("#addSensorForm").serializeArray();
+				const data = formData.reduce((acc, val) => {
+					acc[val.name] = val.value;
+					return acc;
+				}, {});
+
+				$.post(url, data).then(res => {
+					console.log("good", res);
+				})
+				.catch(err => {
+					console.log("bad", err);
+				});
+				e.preventDefault();
+			});
+
+			$("#searchSensorForm button").click((e) => {
+				const url = 'http://localhost:3000/sensor';
+				const formData = $("#addSensorForm").serializeArray();
+				const data = formData.reduce((acc, val) => {
+					acc[val.name] = val.value;
+					return acc;
+				}, {});
+
+				$.get(url, data);
+				e.preventDefault();
+			});
+		})
+	</script>
 </html>
