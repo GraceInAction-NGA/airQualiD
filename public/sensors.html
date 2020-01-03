@@ -82,24 +82,25 @@
 					return acc;
 				}, {});
 
-				$.post(url, data).then(res => {
-					console.log("good", res);
-				})
-				.catch(err => {
-					console.log("bad", err);
-				});
+				$.post(url, data)
+				.then(res => console.log("good", res))
+				.catch(err => console.log("bad", err));
+
 				e.preventDefault();
 			});
 
 			$("#searchSensorForm button").click((e) => {
 				const url = 'http://localhost:3000/sensor';
-				const formData = $("#addSensorForm").serializeArray();
+				const formData = $("#searchSensorForm").serializeArray();
 				const data = formData.reduce((acc, val) => {
 					acc[val.name] = val.value;
 					return acc;
 				}, {});
 
-				$.get(url, data);
+				$.get(url, data)
+				.then(res => console.log("good", res))
+				.catch(err => console.log("bad", err));
+
 				e.preventDefault();
 			});
 		})
