@@ -28,6 +28,14 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-6">
 					<h1>Add Sensor</h1>
+					<div id="addSensorAlerts">
+						<div class="alert alert-success d-none" role="alert">
+							Sensor was successfully added!
+						</div>
+						<div class="alert alert-danger d-none" role="alert">
+							We hit a snag while adding your sensor. Please try again later!
+						</div>	
+					</div>		  
                     <form id="addSensorForm">
                         <div class="form-group">
                             <label for="sensorName">Sensor Name</label>
@@ -49,6 +57,11 @@
                 </div>
 				<div class="col-xs-12 col-md-6">
 					<h1>Search Sensor</h1>
+					<div id="searchSensorAlerts">
+						<div class="alert alert-danger d-none" role="alert">
+							We hit a snag while searching for your sensor. Please try again later!
+						</div>
+					</div>
                     <form id="searchSensorForm">
                         <div class="form-group">
                             <label for="sensorName">Sensor Name</label>
@@ -66,7 +79,13 @@
                             <input type="text" name="sensorID" class="form-control" id="sensorID" placeholder="Sensor ID">
 						</div>
 						<button type="button" class="btn btn-primary mb-5">Search</button>
-                    </form>
+					</form>
+					<div id="sensorSearchResults" class="d-none">
+						<h3>Results</h3>
+						<div class="results">
+
+						</div>
+					</div>
                 </div>
 			</div>
 		</div>
@@ -82,9 +101,17 @@
 					return acc;
 				}, {});
 
+				$("#addSensorAlerts .alert").addClass('d-none');
+
 				$.post(url, data)
-				.then(res => console.log("good", res))
-				.catch(err => console.log("bad", err));
+				.then(res => {
+					$("#addSensorAlerts .alert-success").removeClass('d-none');
+					console.log("good", res);
+				})
+				.catch(err => {
+					$("#addSensorAlerts .alert-danger").removeClass('d-none');
+					console.log("bad", err);
+				});
 
 				e.preventDefault();
 			});
@@ -97,9 +124,22 @@
 					return acc;
 				}, {});
 
+				$("#searchSensorAlerts .alert").addClass('d-none');
+				$("#sensorSearchResults").addClass('d-none');
+				$("#sensorSearchResults .results").empty();
+
 				$.get(url, data)
-				.then(res => console.log("good", res))
-				.catch(err => console.log("bad", err));
+				.then(res => {
+					console.log("good", res);
+					$("#sensorSearchResults").removeClass('d-none');
+					res.forEach(doc => {
+						$("#sensorSearchResults .results").append(`<div>${JSON.stringify(doc)}</div>`);
+					});
+				})
+				.catch(err => {
+					$("#searchSensorAlerts .alert-danger").removeClass('d-none');
+					console.log("bad", err);
+				});
 
 				e.preventDefault();
 			});

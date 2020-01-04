@@ -10,52 +10,46 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static(__dirname + '/public'));
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
-app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect JS bootstrap
-app.use('/jquery',  express.static(__dirname + '/node_modules/jquery/dist')); 
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+app.use('/jquery',  express.static(__dirname + '/node_modules/jquery/dist'));
 
-app.get('/latest', (req, res) => {
-  firebase.database.collection('aqis').orderBy('timestamp', 'desc').limit(1).get()
-  .then(querySnapshot => {
+app.get('/latest', async (req, res) => {
+  try {
+    const query = firebase.database.collection('aqis');
+    const querySnapshot = await query.orderBy('timestamp', 'desc').limit(1).get()
     querySnapshot.forEach(doc => res.send(doc.data()));
-  }).catch(err => req.send({error: "Failed to retrieve data."}));
+  } catch(err) {
+    req.send({error: "Failed to retrieve data."});
+  }
 });
 
-app.get('/sensor', (req, res) => {
-  const sensorsQuery = firebase.database.collection('sensors');
-
-  const sensorIDQuery = sensorsQuery.where("sensorID", "==", req.query.sensorID);
-  const sensorNameQuery = sensorsQuery.where("sensorName", "==", req.query.sensorName);
-  const sensorTypeQuery = sensorsQuery.where("sensorType", "==", req.query.sensorType);
-
-  const data = new Set();
-
-  sensorIDQuery.get().then(snapshot => {
+app.get('/sensor', async (req, res) => {
+  const getDocs = async (req, key) => {
+    const query = firebase.database.collection('sensors');
+    const snapshot = await query.where(key, "==", req.query[key]).get();
+    const datas = [];
     snapshot.forEach(doc => {
-      const d = doc.data();
-      d["id"] = doc.id;
-      data.add(d);
+      const data = doc.data();
+      data['id'] = doc.id;
+      datas.push(data);
     });
-    console.log(data);
-  });
+    return datas;
+  }
 
-  sensorNameQuery.get().then(snapshot => {
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      d["id"] = doc.id;
-      data.add(d);
-    });
-    console.log(data);
-  });
+  try {
+    const sensorIDDocs = await getDocs(req, "sensorID");
+    const sensorTypeDocs = await getDocs(req, "sensorType");
+    const sensorNameDocs = await getDocs(req, "sensorName");
 
-  sensorTypeQuery.get().then(snapshot => {
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      d["id"] = doc.id;
-      data.add(d);
-    });
-    console.log(data);
-  });
+    const docs = sensorIDDocs.concat(sensorTypeDocs, sensorNameDocs);
+    const uniqueDocs = [...new Set(docs)];
+
+    res.send(uniqueDocs);
+  } catch(err) {
+    console.log('Failed to search for sensor: ', err);
+    res.sendStatus(400);
+  }
 });
 
 //TODO Handle Success and Error States
