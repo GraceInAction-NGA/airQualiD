@@ -52,11 +52,7 @@ app.get('/sensor', async (req, res) => {
   }
 });
 
-//TODO Handle Success and Error States
-//TODO Handle case where sensor already exists
 app.post('/sensor', async (req, res) => {
-  console.log(req.body);
-
   try {
     const snapshot = await firebase.database.collection('sensors')
       .where("sensorID", "==", req.body.sensorID)

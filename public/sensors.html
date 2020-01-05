@@ -9,8 +9,8 @@
 	  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
 	  <script src="/jquery/jquery.min.js"></script>
 	  <script src="/js/bootstrap.min.js"></script>
-
 	</head>
+
 	<body>
 		<nav class="navbar navbar-light navbar-expand-lg bg-light">
 			<span class="navbar-brand mb-0 h1">AirQualiD Server</span>
@@ -91,58 +91,5 @@
 		</div>
 	</body>
 
-	<script>
-		$(() => {
-			$("#addSensorForm button").click((e) => {
-				const url = 'http://localhost:3000/sensor';
-				const formData = $("#addSensorForm").serializeArray();
-				const data = formData.reduce((acc, val) => {
-					acc[val.name] = val.value;
-					return acc;
-				}, {});
-
-				$("#addSensorAlerts .alert").addClass('d-none');
-
-				$.post(url, data)
-				.then(res => {
-					$("#addSensorAlerts .alert-success").removeClass('d-none');
-					console.log("good", res);
-				})
-				.catch(err => {
-					$("#addSensorAlerts .alert-danger").removeClass('d-none');
-					console.log("bad", err);
-				});
-
-				e.preventDefault();
-			});
-
-			$("#searchSensorForm button").click((e) => {
-				const url = 'http://localhost:3000/sensor';
-				const formData = $("#searchSensorForm").serializeArray();
-				const data = formData.reduce((acc, val) => {
-					acc[val.name] = val.value;
-					return acc;
-				}, {});
-
-				$("#searchSensorAlerts .alert").addClass('d-none');
-				$("#sensorSearchResults").addClass('d-none');
-				$("#sensorSearchResults .results").empty();
-
-				$.get(url, data)
-				.then(res => {
-					console.log("good", res);
-					$("#sensorSearchResults").removeClass('d-none');
-					res.forEach(doc => {
-						$("#sensorSearchResults .results").append(`<div>${JSON.stringify(doc)}</div>`);
-					});
-				})
-				.catch(err => {
-					$("#searchSensorAlerts .alert-danger").removeClass('d-none');
-					console.log("bad", err);
-				});
-
-				e.preventDefault();
-			});
-		})
-	</script>
+	<script defer src="js/sensors.js"></script>
 </html>
