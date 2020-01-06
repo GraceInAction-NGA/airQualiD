@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+	  <meta charset="utf-8">
+
+	  <title>AirQualiD</title>
+
+	  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+	  <script src="/jquery/jquery.min.js"></script>
+	  <script src="/js/bootstrap.min.js"></script>
+
+	</head>
+	<body>
+		<nav class="navbar navbar-light navbar-expand-lg bg-light">
+			<span class="navbar-brand mb-0 h1">AirQualiD Server</span>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+				  <a class="nav-item nav-link active" href="/index.html">Home <span class="sr-only">(current)</span></a>
+				  <a class="nav-item nav-link" href="/sensors.html">Sensors</a>
+				</div>
+			  </div>
+		</nav>
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col">
+					<h2>Latest Saved AQI</h2>
+					<p id="latestAqi"></p>
+				</div>
+				<div class="col">
+					<h2>PurpleAir AQI</h2>
+						<div id='PurpleAirWidget_37399_module_AQI_conversion_C0_average_10_layer_standard'>Loading PurpleAir Widget...</div>
+						<script src='https://www.purpleair.com/pa.widget.js?key=3WMISHA3QQCL4DQV&module=AQI&conversion=C0&average=10&layer=standard&container=PurpleAirWidget_37399_module_AQI_conversion_C0_average_10_layer_standard'></script>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		const url = 'http://localhost:3000/latest';
+		$.get(url, (latestResponse) => {
+			if (latestResponse.error) {
+				document.querySelector("#latestAqi").textContent = latestResponse.error;
+			} else {
+				const date = (new Date(latestResponse.timestamp)).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
+				document.querySelector("#latestAqi").textContent = `${latestResponse.aqi.realTime} @ ${date}`;
+			}
+		})
+	</script>
+</html>
