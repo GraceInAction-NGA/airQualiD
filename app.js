@@ -1,10 +1,13 @@
 const SensorPollingService = require('./services/SensorPollingService');
 const express = require('express');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 const firebase = require('./services/FirebaseService');
 
 const app = express();
-const PORT = 3000;
+dotenv.config();
+
+const PORT = process.env.PORT || 80;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -83,7 +86,7 @@ app.post('/sensor', async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || PORT, () => {
+app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
   SensorPollingService.run();
 });

@@ -1,6 +1,6 @@
 $(async () => {
     $("#addSensorForm button").click(async (e) => {
-        const url = 'http://localhost:3000/sensor';
+        const url = '/sensor';
         const data = serializeForm("#addSensorForm");
 
         hideElement("#addSensorAlerts .alert")
@@ -16,7 +16,7 @@ $(async () => {
     });
 
     $("#searchSensorForm button").click(async (e) => {
-        const url = 'http://localhost:3000/sensor';
+        const url = '/sensor';
         const data = serializeForm("#searchSensorForm");
 
         hideElement("#searchSensorAlerts .alert");
