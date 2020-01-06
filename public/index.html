@@ -40,7 +40,7 @@
 	</body>
 
 	<script>
-		const url = 'http://localhost:3000/latest';
+		const url = '/latest';
 		$.get(url, (latestResponse) => {
 			if (latestResponse.error) {
 				document.querySelector("#latestAqi").textContent = latestResponse.error;
