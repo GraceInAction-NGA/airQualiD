@@ -17,12 +17,27 @@ const getAll = async () => {
     return datas;
 };
 
-const create = () => {
+const create = async (sensor) => {
+  return await firebase.database.collection('sensors').add(sensor);
+};
 
+const search = async (sensor) => {
+    return await firebase.database.collection('sensors')
+      .where("sensorID", "==", sensor.sensorID)
+      .where("sensorName", "==", sensor.sensorName)
+      .where("sensorType", "==", sensor.sensorType)
+      .get();
+};
+
+const searchBy = async (value, key) => {
+    return await firebase.database.collection('sensors')
+        .where(key, "==", value).get();
 };
 
 module.exports = {
     create,
     get,
-    getAll
+    getAll,
+    search,
+    searchBy
 }
