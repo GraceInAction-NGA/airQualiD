@@ -9,6 +9,7 @@ $(async () => {
             await $.post(url, data);
             showElement("#addSensorAlerts .alert-success");
         } catch(err) {
+            console.log(err);
             showElement("#addSensorAlerts .alert-danger");
         }
         
@@ -25,16 +26,23 @@ $(async () => {
 
         try {
             const res = await $.get(url, data);
-            res.forEach(doc => {
-                const docElement = `<div class="card mb-5">
-                    <div class="card-body">
+            console.log(res);
+            
+            if (res.length > 0) {
+                res.forEach(doc => {
+                    const bodyElement = `
                         <p><b>Sensor Name</b> ${doc.sensorName}</p>
                         <p><b>Sensor ID</b> ${doc.sensorID}</p>
                         <p><b>Sensor Type</b> ${doc.sensorType}</p>
-                    </div>
-                </div>`;
+                    `;
+                    const docElement = createDocElement(bodyElement);
+                    $("#sensorSearchResults .results").append(docElement);
+                });
+            } else {
+                const bodyElement = '<p>No Sensor Found</p>'
+                const docElement = createDocElement(bodyElement);
                 $("#sensorSearchResults .results").append(docElement);
-            });
+            }
 
             showElement("#sensorSearchResults")
         } catch(err) {
@@ -55,3 +63,10 @@ const serializeForm = id => {
         return acc;
     }, {});
 }
+const createDocElement = (bodyElement) => `
+    <div class="card mb-5">
+        <div class="card-body">
+            ${bodyElement}
+        </div>
+    </div>
+`;
