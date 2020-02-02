@@ -13,6 +13,14 @@ const PORT = process.env.PORT || 80;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.all('', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "");
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  //Auth Each API Request created by user.
+  next();
+});
+
 app.use(express.static(__dirname + '/public'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js'));
