@@ -3,16 +3,10 @@ const SensorModel = require("../models/SensorModel");
 const axios = require('axios');
 const PURPLEAIR_URL_BASE = "https://www.purpleair.com/json?show=";
 
-// Will the endpoint reject if we poll for different sensors with less than a minute between calls
 const poll = async () => {
     const sensors = await SensorModel.getAll();
-    sensors.forEach(sensor => {
-        if (sensor.sensorType == "Purple Air") {
-            purpleAirPoller(sensor.sensorID);
-        } else {
-            console.log("Sensor has an invalid type", sensor);
-        }
-    });
+    console.log(sensors);
+    purpleAirPoller(sensors);
 };
 
 const create = async (sensor) => {
@@ -58,10 +52,28 @@ const searchBy = async (value, key) => {
     };
 };
 
-const purpleAirPoller = async (id) => {
+// Deprecated
+const purpleAirPollerDeprecated = async (id) => {
     try {
         const response = await axios.get(`${PURPLEAIR_URL_BASE}${id}`);
         PurpleAirModel.create(response.data);
+    } catch(e) {
+        console.log(e)
+    };
+};
+
+const purpleAirPoller = async (sensors) => {
+    const sensorIds = sensors.map(sensor => sensor.sensorID);
+    const query = sensorIds.reduce((acc, id, i) => {
+        return (i === 0) ? id : `${acc}|${id}`;
+    }, "");
+    try {
+        const {data} = await axios.get(`${PURPLEAIR_URL_BASE}${query}`);
+        const validData = data.results.filter(sensor => {
+            return sensorIds.includes(String(sensor.ID));
+        });
+
+        PurpleAirModel.create(validData);
     } catch(e) {
         console.log(e)
     };
