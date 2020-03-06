@@ -34,18 +34,10 @@ const searchBy = async (value, key) => {
     .where(key, "==", value).get();
 };
 
-const getLatest = async () => {
-  return await firebase.database.collection('aqis')
-    .orderBy('timestamp', 'desc')
-    .limit(1)
-    .get();
-}
-
 module.exports = {
     create,
     get,
     getAll,
-    getLatest,
     search,
     searchBy
 }

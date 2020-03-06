@@ -79,22 +79,9 @@ const purpleAirPoller = async (sensors) => {
     };
 };
 
-const getLatest = async () => {
-    try {
-        const querySnapshot = await SensorModel.getLatest();
-        const data = [];
-        querySnapshot.forEach(doc => data.push(doc.data()));
-        return data;
-    } catch(err) {
-        console.log('Failed to latest retrieve data', err);
-        return null;
-    }
-}
-
 module.exports = {
     poll,
     create,
-    getLatest,
     search,
     searchBy
 }

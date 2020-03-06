@@ -1,5 +1,6 @@
 const SensorPollingService = require('./services/SensorPollingService');
-const SensorService = require('./services/SensorService')
+const SensorService = require('./services/SensorService');
+const AqiService = require('./services/AqiService');
 const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
@@ -25,8 +26,25 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/jquery',  express.static(__dirname + '/node_modules/jquery/dist'));
 
+app.get('/aqi', async (req, res) => {
+  const limit = Number(req.query.limit);
+  if (_.isNaN(limit)) {
+    res.sendStatus(422);
+    return; 
+  }
+
+  const docs = await AqiService.get(limit);
+
+  if (_.isNull(docs)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  res.send(docs);
+});
+
 app.get('/latest', async (req, res) => {
-  const latestDoc = await SensorService.getLatest();
+  const latestDoc = await AqiService.getLatest();
 
   if (_.isNull(latestDoc)) {
     res.sendStatus(400);
