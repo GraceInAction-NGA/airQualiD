@@ -1,4 +1,5 @@
 const AirNowModel = require("../models/AirNowModel");
+const axios = require('axios');
 
 const BASE_URL = "http://www.airnowapi.org";
 const OBSERVATION_URL = `${BASE_URL}/aq/observation/zipCode/current`;
@@ -10,7 +11,7 @@ const get = async (zipCode) => {
 
 const poll = async (zipCode) => {
     try {
-        const data = await get(zipCode);
+        const {data} = await get(zipCode);
         console.log(data);
         AirNowModel.create(data);
     } catch(err) {

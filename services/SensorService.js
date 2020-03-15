@@ -37,7 +37,7 @@ const searchBy = async (value, key) => {
 };
 
 const mapSensorID = (snapshot) => {
-    return snapshot.map(doc => {
+    return snapshot.docs.map(doc => {
         const data = doc.data();
         data['id'] = doc.id;
         return data;
@@ -45,7 +45,6 @@ const mapSensorID = (snapshot) => {
 }
 
 module.exports = {
-    poll,
     create,
     search,
     searchBy,

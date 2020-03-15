@@ -16,7 +16,6 @@ const create = async (datas) => {
 
             const aqi = AqiAdapter.fromPurpleAirAqi(parsedData);
             firebase.database.collection("aqis").add(aqi);
-            console.log(aqi);
         }
     });
 }

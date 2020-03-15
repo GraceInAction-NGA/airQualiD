@@ -139,8 +139,7 @@ const fromAirNow = (data) => {
             latitude: pm25Data.Latitude,
             longitude: pm25Data.Longitude
         },
-        concentration: data.Stats.v5,
-        timestamp: Data.parse(`${pm25Data.DateObserved}T${pm25Data.HourObserved}:00`),
+        timestamp: Date.parse(`${pm25Data.DateObserved.trim()}T${pm25Data.HourObserved}:00`),
         source: "AirNow"
     };
 }

@@ -25,7 +25,6 @@ const searchBy = async (value, key) => {
 
 module.exports = {
     create,
-    get,
     getAll,
     search,
     searchBy
