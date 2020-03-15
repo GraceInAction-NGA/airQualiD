@@ -144,7 +144,12 @@ const fromAirNow = (data) => {
     };
 }
 
+const fromAeroQual = (data) => {
+
+}
+
 module.exports = {
     fromPurpleAirAqi,
-    fromAirNow
+    fromAirNow,
+    fromAeroQual
 }
