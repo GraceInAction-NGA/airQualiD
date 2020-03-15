@@ -1,4 +1,4 @@
-const SensorPollingService = require('./services/SensorPollingService');
+const PollingService = require('./services/PollingService');
 const SensorService = require('./services/SensorService');
 const AqiService = require('./services/AqiService');
 const express = require('express');
@@ -96,5 +96,5 @@ app.post('/sensor', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
-  SensorPollingService.run();
+  PollingService.run();
 });

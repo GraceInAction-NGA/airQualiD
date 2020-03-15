@@ -114,10 +114,37 @@ const fromPurpleAirAqi = (data) => {
         },
         concentration: data.Stats.v5,
         timestamp: data.Stats.lastModified,
+        source: "Purple Air",
         id: data.ID
     };
 }
 
+const fromAirNow = (data) => {
+    const o3Data = data[0];
+    const pm25Data = data[1];
+    const pm10Data = data[2];
+
+    return {
+        aqi: {
+            o3: o3Data.AQI,
+            pm25: pm25Data.AQI,
+            pm10: pm10Data.AQI
+        },
+        category: {
+            o3: getCategory(o3Data.AQI),
+            pm25: getCategory(pm25Data.AQI),
+            pm10: getCategory(pm10Data.AQI)
+        },
+        location: {
+            latitude: pm25Data.Latitude,
+            longitude: pm25Data.Longitude
+        },
+        timestamp: Date.parse(`${pm25Data.DateObserved.trim()}T${pm25Data.HourObserved}:00`),
+        source: "AirNow"
+    };
+}
+
 module.exports = {
-    fromPurpleAirAqi
+    fromPurpleAirAqi,
+    fromAirNow
 }
